@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeScreen from "./screens/HomeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { colorType } from "./components/ColorBoxList";
+import ColorPaletteDetails from "./components/ColorPalette";
+
+export type RootStackParamList = {
+	HomeScreen: undefined;
+	ColorPalette: { paletteName: string; colors: colorType[] };
+};
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+	const RootStack = createNativeStackNavigator<RootStackParamList>();
+	return (
+		<NavigationContainer>
+			<RootStack.Navigator>
+				<RootStack.Screen
+					name='HomeScreen'
+					component={HomeScreen}
+					options={{ title: "Home" }}
+				/>
+				<RootStack.Screen
+					name='ColorPalette'
+					component={ColorPaletteDetails}
+					options={({ route }) => ({
+						title: route.params.paletteName,
+					})}
+				/>
+			</RootStack.Navigator>
+			<StatusBar style='auto' />
+		</NavigationContainer>
+	);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

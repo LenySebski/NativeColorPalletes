@@ -1,16 +1,26 @@
-import { StyleSheet, Text, View, FlatList, RefreshControl } from "react-native";
-import React, { useState, useCallback, useEffect } from "react";
+import {
+	StyleSheet,
+	Text,
+	View,
+	FlatList,
+	TouchableOpacity,
+} from "react-native";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import PalettePreview from "../components/PalettePreview";
-import { colorType } from "../components/ColorBoxList";
-
-type PalleteItemProps = {
-	paletteName: string;
-	colors: colorType[];
-};
+import { PalleteType } from "../types/types";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
+import { AppContext } from "../context/AppContext";
+import UserPalletes from "../components/UserPalletes";
 
 const HomeScreen = () => {
-	const [palletes, setPalletes] = useState<PalleteItemProps[]>([]);
+	const appContext = useContext(AppContext);
+	const [palletes, setPalletes] = useState<PalleteType[]>([]);
 	const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+	const navigation =
+		useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 	const fetchPalletes = useCallback(async () => {
 		setIsRefreshing(true);
@@ -31,14 +41,24 @@ const HomeScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.header}>Featured palettes</Text>
+			<UserPalletes />
 			<FlatList
 				data={palletes}
 				keyExtractor={(item) => item.paletteName}
 				renderItem={({ item }) => <PalettePreview {...item} />}
 				refreshing={isRefreshing}
 				onRefresh={() => fetchPalletes}
+				ListHeaderComponent={
+					<Text style={styles.header}>Featured palettes</Text>
+				}
 			/>
+			<TouchableOpacity onPress={() => navigation.navigate("Modal")}>
+				<View style={styles.button}>
+					<Text style={styles.buttonText}>
+						Add a color scheme
+					</Text>
+				</View>
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -58,5 +78,21 @@ const styles = StyleSheet.create({
 		margin: 10,
 		opacity: 0.8,
 		textAlign: "center",
+	},
+	button: {
+		backgroundColor: "blue",
+		marginTop: 10,
+		marginBottom: 30,
+		marginHorizontal: 40,
+		borderRadius: 25,
+	},
+
+	buttonText: {
+		fontSize: 18,
+		fontWeight: "bold",
+		paddingVertical: 20,
+		opacity: 0.9,
+		textAlign: "center",
+		color: "white",
 	},
 });

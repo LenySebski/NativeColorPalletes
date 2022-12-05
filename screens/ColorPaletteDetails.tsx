@@ -1,14 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import ColorBoxList from "./ColorBoxList";
+import ColorBoxList from "../components/ColorBoxList";
 import { RootStackParamList } from "../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ColorPalette">;
 
-const ColorPaletteDetails = ({ navigation, route }: Props) => {
-	console.log("navigation", navigation);
-	console.log("route", route);
+const ColorPaletteDetails = ({ route }: Props) => {
 	return (
 		<View style={styles.container}>
 			<ColorBoxList data={route.params.colors} />

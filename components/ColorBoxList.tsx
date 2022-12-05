@@ -1,18 +1,13 @@
-import { View, FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import React from "react";
 import ColorBox from "./ColorBox";
+import { ColorType } from "../types/types";
 
-export type colorType = {
-	id: number;
-	colorName: string;
-	hexCode: string;
-};
-
-const ColorBoxList = ({ data }: { data: colorType[] }) => {
+const ColorBoxList = ({ data }: { data: ColorType[] }) => {
 	return (
 		<FlatList
 			data={data}
-			renderItem={({ item }: { item: colorType }) => {
+			renderItem={({ item }) => {
 				return (
 					<ColorBox
 						colorName={item.colorName}
@@ -20,7 +15,7 @@ const ColorBoxList = ({ data }: { data: colorType[] }) => {
 					/>
 				);
 			}}
-			keyExtractor={(item: colorType) => item.hexCode}
+			keyExtractor={(item) => item.hexCode}
 			style={styles.list}
 			scrollEnabled
 		/>
